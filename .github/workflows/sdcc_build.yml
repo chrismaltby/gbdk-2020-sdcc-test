@@ -110,7 +110,7 @@ jobs:
         if: (matrix.name == 'Linux-x64') || (matrix.name == 'MacOS-x64') || (matrix.name == 'MacOS-arm64')
         shell: bash
         run: |    
-          if [ ("${{ matrix.name }}" = "MacOS-arm64") ]; then
+          if [ "${{ matrix.name }}" = "MacOS-arm64" ]; then
             export LDFLAGS="-L/opt/homebrew/lib"
             export CPPFLAGS="-I/opt/homebrew/include"
           fi
