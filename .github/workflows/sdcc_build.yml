@@ -48,9 +48,6 @@ jobs:
         run: |
           echo "SDCC_VER=${{ inputs.sdcc_version_num }}" >> $GITHUB_ENV
           echo "BUILD_PACKAGE_FILENAME=sdcc-${{ inputs.sdcc_version_num }}-${{ matrix.name }}.tar.gz" >> $GITHUB_ENV
-          ls -l /usr/include
-          find /usr
-
 
       # ==== Install Dependencies ====
       - name: Install Dependencies Linux
@@ -64,9 +61,6 @@ jobs:
         run: |
           # Packages (some may already be present)
           brew install flex bison boost texinfo zlib subversion
-          which brew
-          ls -l /usr/local/include
-          find /opt/homebrew  | grep adjacency_list.hpp
 
       - name: Symlink boost MacOS arm64
         if: (matrix.name == 'MacOS-arm64')
@@ -122,6 +116,10 @@ jobs:
         if: (matrix.name == 'Linux-x64') || (matrix.name == 'MacOS-x64') || (matrix.name == 'MacOS-arm64')
         shell: bash
         run: |    
+          if [ ("${{ matrix.name }}" = "MacOS-arm64") ]; then
+            export LDFLAGS="-L/opt/homebrew/lib"
+            export CPPFLAGS="-I/opt/homebrew/include"
+          fi
           # Target older macOS version than whatever build OS is for better compatibility (Linux should ignore this)
           export MACOSX_DEPLOYMENT_TARGET=10.10
           cd sdcc-${{ env.SDCC_VER }}/sdcc
