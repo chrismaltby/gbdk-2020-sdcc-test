@@ -48,6 +48,9 @@ jobs:
         run: |
           echo "SDCC_VER=${{ inputs.sdcc_version_num }}" >> $GITHUB_ENV
           echo "BUILD_PACKAGE_FILENAME=sdcc-${{ inputs.sdcc_version_num }}-${{ matrix.name }}.tar.gz" >> $GITHUB_ENV
+          ls -l /usr/include
+          find /usr
+
 
       # ==== Install Dependencies ====
       - name: Install Dependencies Linux
