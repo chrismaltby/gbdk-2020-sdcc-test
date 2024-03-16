@@ -62,12 +62,6 @@ jobs:
           # Packages (some may already be present)
           brew install flex bison boost texinfo zlib subversion
 
-      - name: Symlink boost MacOS arm64
-        if: (matrix.name == 'MacOS-arm64')
-        run: |
-          sudo ln -s /opt/homebrew/include/boost /usr/local/include/boost
-          ls -l /usr/local/include
-
       # This could be split apart to separate 32 and 64 bit, but doesn't
       # take much time and is easier to keep in sync as one stage.
       - name: Install Dependencies WinCross
