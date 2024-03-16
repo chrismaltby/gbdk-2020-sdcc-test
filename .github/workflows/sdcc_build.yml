@@ -60,12 +60,16 @@ jobs:
         if: (matrix.name == 'MacOS-x64') || (matrix.name == 'MacOS-arm64')
         run: |
           # Packages (some may already be present)
-          brew update
           brew install flex bison boost texinfo zlib subversion
           which brew
-          find /usr/local/Cellar | grep adjacency_list.hpp
-          ls -l /usr/local/include/boost
+          ls -l /usr/local/include
           find /opt/homebrew  | grep adjacency_list.hpp
+
+      - name: Symlink boost MacOS arm64
+        if: (matrix.name == 'MacOS-arm64')
+        run: |
+          sudo ln -s /opt/homebrew/include/boost /usr/local/include/boost
+          ls -l /usr/local/include
 
       # This could be split apart to separate 32 and 64 bit, but doesn't
       # take much time and is easier to keep in sync as one stage.
