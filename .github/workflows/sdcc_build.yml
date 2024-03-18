@@ -34,7 +34,7 @@ jobs:
             name: Win32-On-Linux
           - os: ubuntu-20.04
             name: Win64-On-Linux
-          - os: macos-11
+          - os: macos-13
             name: MacOS-x64
           - os: macos-14
             name: MacOS-arm64            
