@@ -143,20 +143,13 @@ jobs:
           mkdir libexec
           mkdir libexec/sdcc
           echo "MAKE_COMPLETE"
-          if [ "${{ matrix.name }}" = "MacOS-x64" -o "${{ matrix.name }}" = "MacOS-arm64" ]; then
+          if [ "${{ matrix.name }}" = "MacOS-x64" ]; then
             # Special case - use sdcc official build of cc1 since it has static linkage for libisl, libzstd (had some trouble with that on this build)
             # this will untar into libexec/sdcc/cc1
             echo "FETCH MAC CC1"
             curl -Lo macos-cc1.tar.gz https://github.com/gbdk-2020/gbdk-2020-sdcc/releases/download/sdcc-extras/sdcc-4.3-macos-cc1-14110.tar.gz
             tar xvfz macos-cc1.tar.gz
             echo "FETCH MAC CC1 COMPLETE"
-          elif [ "${{ matrix.name }}" = "MacOS-arm64" ]; then
-            # Special case - use sdcc official build of cc1 since it has static linkage for libisl, libzstd (had some trouble with that on this build)
-            # this will untar into libexec/sdcc/cc1
-            echo "FETCH MAC CC1 - ARM"
-            curl -Lo macos-cc1.tar.gz https://github.com/gbdk-2020/gbdk-2020-sdcc/releases/download/sdcc-extras/sdcc-4.3-macos-cc1-14110.tar.gz
-            tar xvfz macos-cc1.tar.gz
-            echo "FETCH MAC CC1 COMPLETE - ARM"            
           else
             echo "SKIP MAC CC1"            
             mv bin/cc1 libexec/sdcc
