@@ -28,14 +28,14 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: ubuntu-20.04
-          #   name: Linux-x64
-          # - os: ubuntu-20.04
-          #   name: Win32-On-Linux
-          # - os: ubuntu-20.04
-          #   name: Win64-On-Linux
-          # - os: macos-11
-          #   name: MacOS-x64
+          - os: ubuntu-20.04
+            name: Linux-x64
+          - os: ubuntu-20.04
+            name: Win32-On-Linux
+          - os: ubuntu-20.04
+            name: Win64-On-Linux
+          - os: macos-11
+            name: MacOS-x64
           - os: macos-14
             name: MacOS-arm64            
     steps:
@@ -111,11 +111,12 @@ jobs:
         shell: bash
         run: |    
           if [ "${{ matrix.name }}" = "MacOS-arm64" ]; then
+            # MacOS arm64 homebrew installs libs to /opt/homebrew rather than /usr/local so set LDFLAGS/CPPFLAGS
+            # Clang seems to always use dynamic libraries where available to so copying static libraries to another folder
             sudo mkdir /opt/homebrew/lib-static
             sudo cp -r /opt/homebrew/lib/*.a /opt/homebrew/lib-static
             export LDFLAGS="-L/opt/homebrew/lib-static"
             export CPPFLAGS="-I/opt/homebrew/include"
-            find /opt/homebrew
           fi
           # Target older macOS version than whatever build OS is for better compatibility (Linux should ignore this)
           export MACOSX_DEPLOYMENT_TARGET=10.10
@@ -133,7 +134,6 @@ jobs:
           cp -f support/sdbinutils/binutils/sdnm bin
           cp -f support/cpp/gcc/cc1 bin
           cp -f support/cpp/gcc/cpp bin/sdcpp
-          cp -f support/cpp/config.log bin
           strip bin/* || true
           # remove .in mapping files, etc
           rm -f bin/*.in
@@ -142,19 +142,14 @@ jobs:
           # Move cc1 to it's special hardwired path
           mkdir libexec
           mkdir libexec/sdcc
-          echo "MAKE_COMPLETE"
           if [ "${{ matrix.name }}" = "MacOS-x64" ]; then
             # Special case - use sdcc official build of cc1 since it has static linkage for libisl, libzstd (had some trouble with that on this build)
             # this will untar into libexec/sdcc/cc1
-            echo "FETCH MAC CC1"
             curl -Lo macos-cc1.tar.gz https://github.com/gbdk-2020/gbdk-2020-sdcc/releases/download/sdcc-extras/sdcc-4.3-macos-cc1-14110.tar.gz
             tar xvfz macos-cc1.tar.gz
-            echo "FETCH MAC CC1 COMPLETE"
           else
-            echo "SKIP MAC CC1"            
             mv bin/cc1 libexec/sdcc
           fi
-          echo "BUILD_DONE"            
           ls -la bin
           cd ../..
 
