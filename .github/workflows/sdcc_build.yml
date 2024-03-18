@@ -113,6 +113,7 @@ jobs:
           if [ "${{ matrix.name }}" = "MacOS-arm64" ]; then
             export LDFLAGS="-L/opt/homebrew/lib"
             export CPPFLAGS="-I/opt/homebrew/include"
+            find /opt/homebrew
           fi
           # Target older macOS version than whatever build OS is for better compatibility (Linux should ignore this)
           export MACOSX_DEPLOYMENT_TARGET=10.10
