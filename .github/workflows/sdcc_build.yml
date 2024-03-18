@@ -111,7 +111,9 @@ jobs:
         shell: bash
         run: |    
           if [ "${{ matrix.name }}" = "MacOS-arm64" ]; then
-            export LDFLAGS="-L/opt/homebrew/lib"
+            sudo mkdir /opt/homebrew/lib-static
+            sudo cp -r /opt/homebrew/lib/*.a /opt/homebrew/lib-static
+            export LDFLAGS="-L/opt/homebrew/lib-static"
             export CPPFLAGS="-I/opt/homebrew/include"
             find /opt/homebrew
           fi
