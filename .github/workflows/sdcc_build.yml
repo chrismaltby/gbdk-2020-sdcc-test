@@ -130,6 +130,7 @@ jobs:
           cp -f support/sdbinutils/binutils/sdnm bin
           cp -f support/cpp/gcc/cc1 bin
           cp -f support/cpp/gcc/cpp bin/sdcpp
+          cp -f support/cpp/config.log bin
           strip bin/* || true
           # remove .in mapping files, etc
           rm -f bin/*.in
